@@ -2,7 +2,7 @@ import type { NextPage, GetServerSideProps } from "next";
 import Link from "next/link";
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const res = await fetch("http://localhost:3001/users");
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/users`);
   const users = await res.json();
   return {
     props: { users },
