@@ -34,12 +34,12 @@ const Users: NextPage<Props> = (props) => {
                 <td>{user.name}</td>
                 <td>{user.email}</td>
                 <td>
-                  <Link href={`/user/${user.id}`}>
+                  <Link href={`/users/${user.id}`}>
                     <a>Show</a>
                   </Link>
                 </td>
                 <td>
-                  <Link href={`/user/${user.id}/edit`}>
+                  <Link href={`/users/${user.id}/edit`}>
                     <a>Edit</a>
                   </Link>
                 </td>
