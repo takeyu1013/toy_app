@@ -49,7 +49,7 @@ const New: NextPage = () => {
         console.error("Could not obtain user info");
       }
     },
-    []
+    [name, email, router]
   );
   return (
     <div>
