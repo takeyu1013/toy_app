@@ -1,6 +1,13 @@
 import type { NextPage } from "next";
+import { useRouter } from "next/dist/client/router";
 import Link from "next/link";
 import React, { useCallback, useState } from "react";
+
+type User = {
+  id: number;
+  email: string;
+  name: string;
+};
 
 const New: NextPage = () => {
   const [name, setName] = useState("");
@@ -17,20 +24,33 @@ const New: NextPage = () => {
     },
     []
   );
-  const createUser = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const router = useRouter();
+  const createUser = useCallback(
+    async (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
 
-    await fetch(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/user`, {
-      body: JSON.stringify({
-        name: name,
-        email: email,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-    });
-  };
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_HOST}/user`,
+        {
+          body: JSON.stringify({
+            name: name,
+            email: email,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+        }
+      );
+      if (response.ok) {
+        const user = (await response.json()) as User;
+        router.push(`/users/${user.id}`);
+      } else {
+        console.error("Could not obtain user info");
+      }
+    },
+    []
+  );
   return (
     <div>
       <h1>New User</h1>
