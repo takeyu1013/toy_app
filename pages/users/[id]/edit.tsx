@@ -1,7 +1,18 @@
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/dist/client/router";
 import Link from "next/link";
 import React, { useCallback, useState } from "react";
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const { id } = ctx.query;
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_HOST}/users/${id}`
+  );
+  const user = await res.json();
+  return {
+    props: { user },
+  };
+};
 
 type User = {
   id: number;
@@ -9,9 +20,11 @@ type User = {
   name: string;
 };
 
-const Edit: NextPage = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+type Props = { user: User };
+
+const Edit: NextPage<Props> = (props) => {
+  const [name, setName] = useState(props.user.name);
+  const [email, setEmail] = useState(props.user.email);
   const handleName = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setName(event.target.value);
