@@ -1,5 +1,6 @@
 import type { NextPage, GetServerSideProps } from "next";
 import Link from "next/link";
+import { useCallback, useState } from "react";
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/users`);
@@ -10,7 +11,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
 };
 
 type User = {
-  id: number;
+  id: string;
   email: string;
   name: string;
 };
@@ -18,6 +19,18 @@ type User = {
 type Props = { users: User[] };
 
 const Users: NextPage<Props> = (props) => {
+  const [users, setUsers] = useState(props.users);
+  const destroyUser = useCallback(
+    async (event: React.MouseEvent<HTMLAnchorElement>) => {
+      const id = event.currentTarget.id;
+      await fetch(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/user/${id}`, {
+        method: "DELETE",
+      });
+      setUsers(users.filter((user) => user.id != id));
+    },
+    [users]
+  );
+
   return (
     <div>
       <h1>Users</h1>
@@ -44,8 +57,10 @@ const Users: NextPage<Props> = (props) => {
                   </Link>
                 </td>
                 <td>
-                  <Link href="">
-                    <a>Destroy</a>
+                  <Link href="/users">
+                    <a id={user.id} onClick={destroyUser}>
+                      Destroy
+                    </a>
                   </Link>
                 </td>
               </tr>
