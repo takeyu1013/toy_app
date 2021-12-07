@@ -11,26 +11,44 @@ export const getServerSideProps: GetServerSideProps = async () => {
 };
 
 type User = {
-  id: string;
+  id: number;
   email: string;
   name: string;
 };
 
 type Props = { users: User[] };
 
-const Users: NextPage<Props> = (props) => {
-  const [users, setUsers] = useState(props.users);
-  const destroyUser = useCallback(
-    async (event: React.MouseEvent<HTMLAnchorElement>) => {
-      const id = event.currentTarget.id;
-      await fetch(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/user/${id}`, {
-        method: "DELETE",
-      });
-      setUsers(users.filter((user) => user.id != id));
-    },
-    [users]
-  );
+const UserComponent: React.VFC<{ user: User }> = ({ user }) => {
+  const destroyUser = useCallback(async () => {
+    await fetch(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/users/${user.id}`, {
+      method: "DELETE",
+    });
+  }, [user.id]);
 
+  return (
+    <tr>
+      <td>{user.name}</td>
+      <td>{user.email}</td>
+      <td>
+        <Link href={`/users/${user.id}`}>
+          <a>Show</a>
+        </Link>
+      </td>
+      <td>
+        <Link href={`/users/${user.id}/edit`}>
+          <a>Edit</a>
+        </Link>
+      </td>
+      <td>
+        <Link href="/users">
+          <a onClick={destroyUser}>Destroy</a>
+        </Link>
+      </td>
+    </tr>
+  );
+};
+
+const Users: NextPage<Props> = (props) => {
   return (
     <div>
       <h1>Users</h1>
@@ -42,29 +60,7 @@ const Users: NextPage<Props> = (props) => {
         </thead>
         <tbody>
           {props.users.map((user) => {
-            return (
-              <tr key={user.id}>
-                <td>{user.name}</td>
-                <td>{user.email}</td>
-                <td>
-                  <Link href={`/users/${user.id}`}>
-                    <a>Show</a>
-                  </Link>
-                </td>
-                <td>
-                  <Link href={`/users/${user.id}/edit`}>
-                    <a>Edit</a>
-                  </Link>
-                </td>
-                <td>
-                  <Link href="/users">
-                    <a id={user.id} onClick={destroyUser}>
-                      Destroy
-                    </a>
-                  </Link>
-                </td>
-              </tr>
-            );
+            return <UserComponent key={user.id} user={user} />;
           })}
         </tbody>
       </table>
