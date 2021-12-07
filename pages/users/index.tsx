@@ -1,6 +1,6 @@
 import type { NextPage, GetServerSideProps } from "next";
 import Link from "next/link";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/users`);

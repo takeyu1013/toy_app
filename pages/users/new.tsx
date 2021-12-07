@@ -51,6 +51,7 @@ const New: NextPage = () => {
     },
     [name, email, router]
   );
+
   return (
     <div>
       <h1>New User</h1>
