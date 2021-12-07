@@ -30,7 +30,7 @@ const New: NextPage = () => {
       event.preventDefault();
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_HOST}/user`,
+        `${process.env.NEXT_PUBLIC_BACKEND_HOST}/users`,
         {
           body: JSON.stringify({
             name: name,

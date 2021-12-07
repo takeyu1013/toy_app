@@ -43,7 +43,7 @@ const Edit: NextPage<Props> = (props) => {
       event.preventDefault();
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_HOST}/user/${router.query.id}/edit`,
+        `${process.env.NEXT_PUBLIC_BACKEND_HOST}/users/${router.query.id}`,
         {
           body: JSON.stringify({
             name: name,

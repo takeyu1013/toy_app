@@ -25,7 +25,6 @@ const User: NextPage<Props> = (props) => {
   const router = useRouter();
   return (
     <div>
-      <p>User was successfully created.</p>
       <p>
         <strong>Name:</strong> {props.user.name}
       </p>
