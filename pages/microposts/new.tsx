@@ -46,16 +46,27 @@ const New: NextPage = () => {
   );
 
   return (
-    <div>
-      <h1>New Micropost</h1>
+    <div className="p-8">
+      <h1 className="font-sans font-extrabold text-3xl tracking-tight">
+        New Micropost
+      </h1>
       <form onSubmit={createUser}>
-        <div className="field">
-          <label htmlFor="name">Name</label>
-          <textarea required value={content} onChange={handleContent} />
-        </div>
-        <div className="field">
-          <label htmlFor="email">User</label>
+        <label className="pt-4 block" htmlFor="content">
+          Content
+        </label>
+        <textarea
+          className="border border-black block"
+          id="content"
+          required
+          value={content}
+          onChange={handleContent}
+        />
+        <label className="pt-4 block" htmlFor="userId">
+          User
+        </label>
+        <div className="pb-4">
           <input
+            className="border border-black block"
             id="userId"
             type="number"
             required
@@ -63,12 +74,12 @@ const New: NextPage = () => {
             onChange={handleUserId}
           />
         </div>
-        <div className="actions">
-          <button type="submit">Create Micropost</button>
-        </div>
+        <button className="block border rounded-lg px-2 text-sm" type="submit">
+          Create Micropost
+        </button>
       </form>
       <Link href="/microposts">
-        <a>Back</a>
+        <a className="underline pt-4 block">Back</a>
       </Link>
     </div>
   );
