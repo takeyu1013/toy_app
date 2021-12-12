@@ -27,21 +27,23 @@ const UserComponent: React.VFC<{ user: User }> = ({ user }) => {
 
   return (
     <tr>
-      <td>{user.name}</td>
-      <td>{user.email}</td>
+      <td className="px-1">{user.name}</td>
+      <td className="px-1">{user.email}</td>
       <td>
         <Link href={`/users/${user.id}`}>
-          <a>Show</a>
+          <a className="px-1 underline">Show</a>
         </Link>
       </td>
       <td>
         <Link href={`/users/${user.id}/edit`}>
-          <a>Edit</a>
+          <a className="px-1 underline">Edit</a>
         </Link>
       </td>
       <td>
         <Link href="/users">
-          <a onClick={destroyUser}>Destroy</a>
+          <a className="px-1 underline" onClick={destroyUser}>
+            Destroy
+          </a>
         </Link>
       </td>
     </tr>
@@ -50,9 +52,9 @@ const UserComponent: React.VFC<{ user: User }> = ({ user }) => {
 
 const Users: NextPage<Props> = (props) => {
   return (
-    <div>
-      <h1>Users</h1>
-      <table>
+    <div className="p-8">
+      <h1 className="text-3xl font-extrabold pb-2">Users</h1>
+      <table className="pb-4 block">
         <thead>
           <th>Name</th>
           <th>Email</th>
@@ -65,7 +67,7 @@ const Users: NextPage<Props> = (props) => {
         </tbody>
       </table>
       <Link href="/users/new">
-        <a>New User</a>
+        <a className="underline text-gray-700 hover:text-black">New User</a>
       </Link>
     </div>
   );

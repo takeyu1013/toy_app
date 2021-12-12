@@ -47,9 +47,7 @@ const New: NextPage = () => {
 
   return (
     <div className="p-8">
-      <h1 className="font-sans font-extrabold text-3xl tracking-tight">
-        New Micropost
-      </h1>
+      <h1 className="font-extrabold text-3xl">New Micropost</h1>
       <form onSubmit={createUser}>
         <label className="pt-4 block" htmlFor="content">
           Content
