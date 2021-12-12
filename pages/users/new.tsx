@@ -53,11 +53,13 @@ const New: NextPage = () => {
   );
 
   return (
-    <div>
-      <h1>New User</h1>
-      <form onSubmit={createUser}>
-        <div className="field">
-          <label htmlFor="name">Name</label>
+    <div className="p-8">
+      <h1 className="font-extrabold text-3xl pb-4">New User</h1>
+      <form className="pb-4" onSubmit={createUser}>
+        <div className="pb-4">
+          <label htmlFor="name" className="block">
+            Name
+          </label>
           <input
             id="name"
             type="text"
@@ -65,10 +67,13 @@ const New: NextPage = () => {
             required
             value={name}
             onChange={handleName}
+            className="border border-black"
           />
         </div>
-        <div className="field">
-          <label htmlFor="email">Email</label>
+        <div className="pb-4">
+          <label htmlFor="email" className="block">
+            Email
+          </label>
           <input
             id="email"
             type="text"
@@ -76,14 +81,15 @@ const New: NextPage = () => {
             required
             value={email}
             onChange={handleEmail}
+            className="border border-black"
           />
         </div>
-        <div className="actions">
-          <button type="submit">Create User</button>
-        </div>
+        <button type="submit" className="block border rounded-lg px-2 text-sm">
+          Create User
+        </button>
       </form>
       <Link href="/users">
-        <a>Back</a>
+        <a className="underline">Back</a>
       </Link>
     </div>
   );

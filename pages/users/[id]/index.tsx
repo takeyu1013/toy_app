@@ -24,17 +24,20 @@ type Props = { user: User };
 const User: NextPage<Props> = (props) => {
   const router = useRouter();
   return (
-    <div>
-      <p>
+    <div className="p-8">
+      <p className="pb-4">
         <strong>Name:</strong> {props.user.name}
       </p>
-      <p>
+      <p className="pb-4">
         <strong>Email:</strong> {props.user.email}
       </p>
       <Link href={`/users/${router.query}/edit`}>
-        <a>Edit</a>
+        <a className="underline">Edit</a>
       </Link>
-      <Link href="/users">Back</Link>
+      {" | "}
+      <Link href="/users">
+        <a className="underline">Back</a>
+      </Link>
     </div>
   );
 };
