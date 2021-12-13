@@ -1,75 +1,65 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/dist/client/router";
 import Link from "next/link";
-import React, { useCallback, useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+
+type Micropost = {
+  content: string;
+  userId: string;
+};
 
 const New: NextPage = () => {
-  const [content, setContent] = useState("");
-  const [userId, setUserId] = useState("");
-  const handleContent = useCallback(
-    (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-      setContent(event.target.value);
-    },
-    []
-  );
-  const handleUserId = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setUserId(event.target.value);
-    },
-    []
-  );
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Micropost>();
   const router = useRouter();
-  const createUser = useCallback(
-    async (event: React.FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
-
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_HOST}/microposts`,
-        {
-          body: JSON.stringify({
-            content: content,
-            user_id: userId,
-          }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-          method: "POST",
-        }
-      );
-      if (response.ok) {
-        router.push(`/microposts`);
-      } else {
-        console.error("Could not obtain micropost info");
+  const createMicropost: SubmitHandler<Micropost> = async (data) => {
+    console.log(data);
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_HOST}/microposts`,
+      {
+        body: JSON.stringify({
+          content: data.content,
+          user_id: data.userId,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
       }
-    },
-    [content, userId, router]
-  );
+    );
+    if (response.ok) {
+      router.push(`/microposts`);
+    } else {
+      console.error("Could not obtain micropost info");
+    }
+  };
 
   return (
     <div className="p-8">
       <h1 className="font-extrabold text-3xl">New Micropost</h1>
-      <form onSubmit={createUser}>
+      <form onSubmit={handleSubmit(createMicropost)}>
+        {errors.userId && "User must exist"}
+        {errors.content && "Content can't be blank"}
+        {errors.content?.type === "maxLength" &&
+          "Content is too long (maximum is 140 charactors"}
         <label className="pt-4 block" htmlFor="content">
           Content
         </label>
         <textarea
           className="border border-black block"
-          id="content"
-          required
-          value={content}
-          onChange={handleContent}
+          {...register("content", { required: true, maxLength: 140 })}
         />
         <label className="pt-4 block" htmlFor="userId">
           User
         </label>
         <div className="pb-4">
           <input
-            className="border border-black block"
-            id="userId"
             type="number"
-            required
-            value={userId}
-            onChange={handleUserId}
+            className="border border-black block"
+            {...register("userId", { required: true })}
           />
         </div>
         <button className="block border rounded-lg px-2 text-sm" type="submit">
