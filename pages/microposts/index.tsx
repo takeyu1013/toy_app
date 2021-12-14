@@ -1,4 +1,5 @@
 import type { NextPage, GetServerSideProps } from "next";
+import type { Micropost } from "../../types/micropost";
 import Link from "next/link";
 
 export const getServerSideProps: GetServerSideProps = async () => {
@@ -7,12 +8,6 @@ export const getServerSideProps: GetServerSideProps = async () => {
   return {
     props: { microposts },
   };
-};
-
-type Micropost = {
-  id: number;
-  content: string;
-  user_id: number;
 };
 
 const Microposts: NextPage<{ microposts: Micropost[] }> = ({ microposts }) => {
@@ -32,12 +27,12 @@ const Microposts: NextPage<{ microposts: Micropost[] }> = ({ microposts }) => {
                 <td className="px-1">{microposts.content}</td>
                 <td className="px-1">{microposts.user_id}</td>
                 <td>
-                  <Link href="#">
+                  <Link href={`/microposts/${microposts.id}`}>
                     <a className="px-1 underline">Show</a>
                   </Link>
                 </td>
                 <td>
-                  <Link href="#">
+                  <Link href={`/microposts/${microposts.id}/edit`}>
                     <a className="px-1 underline">Edit</a>
                   </Link>
                 </td>

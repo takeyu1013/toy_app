@@ -1,10 +1,24 @@
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/dist/client/router";
 import Link from "next/link";
+import React, { useCallback, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import type { Micropost } from "../../types/micropost";
+import type { Micropost } from "../../../types/micropost";
 
-const New: NextPage = () => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const { id } = ctx.query;
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_HOST}/microposts/${id}`
+  );
+  const micropost = await res.json();
+  return {
+    props: {
+      micropost,
+    },
+  };
+};
+
+const Edit: NextPage<{ micropost: Micropost }> = ({ micropost }) => {
   const {
     register,
     handleSubmit,
@@ -12,9 +26,9 @@ const New: NextPage = () => {
   } = useForm<Micropost>();
   const router = useRouter();
 
-  const createMicropost: SubmitHandler<Micropost> = async (data) => {
+  const updateMicropost: SubmitHandler<Micropost> = async (data) => {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_HOST}/microposts`,
+      `${process.env.NEXT_PUBLIC_BACKEND_HOST}/microposts/${micropost.id}`,
       {
         body: JSON.stringify({
           content: data.content,
@@ -23,7 +37,7 @@ const New: NextPage = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        method: "POST",
+        method: "PATCH",
       }
     );
     if (response.ok) {
@@ -32,11 +46,10 @@ const New: NextPage = () => {
       console.error("Could not obtain micropost info");
     }
   };
-
   return (
     <div className="p-8">
       <h1 className="font-extrabold text-3xl">New Micropost</h1>
-      <form onSubmit={handleSubmit(createMicropost)}>
+      <form onSubmit={handleSubmit(updateMicropost)}>
         {errors.user_id && "User must exist"}
         {errors.content && "Content can't be blank"}
         {errors.content?.type === "maxLength" &&
@@ -46,6 +59,7 @@ const New: NextPage = () => {
         </label>
         <textarea
           className="border border-black block"
+          defaultValue={micropost.content}
           {...register("content", { required: true, maxLength: 140 })}
         />
         <label className="pt-4 block" htmlFor="user_id">
@@ -55,11 +69,12 @@ const New: NextPage = () => {
           <input
             type="number"
             className="border border-black block"
+            defaultValue={micropost.user_id}
             {...register("user_id", { required: true })}
           />
         </div>
         <button className="block border rounded-lg px-2 text-sm" type="submit">
-          Create Micropost
+          Update Micropost
         </button>
       </form>
       <Link href="/microposts">
@@ -69,4 +84,4 @@ const New: NextPage = () => {
   );
 };
 
-export default New;
+export default Edit;
