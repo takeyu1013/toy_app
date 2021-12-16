@@ -1,6 +1,7 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/dist/client/router";
 import Link from "next/link";
+import { useCallback } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import type { Micropost } from "../../types/micropost";
 
@@ -12,26 +13,30 @@ const New: NextPage = () => {
   } = useForm<Micropost>();
   const router = useRouter();
 
-  const createMicropost: SubmitHandler<Micropost> = async (data) => {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_HOST}/microposts`,
-      {
-        body: JSON.stringify({
-          content: data.content,
-          userId: data.userId,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-        method: "POST",
+  const createMicropost: SubmitHandler<Micropost> = useCallback(
+    async (data) => {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_HOST}/microposts`,
+        {
+          body: JSON.stringify({
+            content: data.content,
+            userId: data.userId,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+        }
+      );
+      if (response.ok) {
+        const micropost = (await response.json()) as Micropost;
+        router.push(`/microposts/${micropost.id}`);
+      } else {
+        console.error("Could not obtain micropost info");
       }
-    );
-    if (response.ok) {
-      router.push(`/microposts`);
-    } else {
-      console.error("Could not obtain micropost info");
-    }
-  };
+    },
+    [router]
+  );
 
   return (
     <div className="p-8">
