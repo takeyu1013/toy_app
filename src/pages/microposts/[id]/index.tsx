@@ -22,7 +22,7 @@ const Micropost: NextPage<{ micropost: Micropost }> = ({ micropost }) => {
         <strong>Content: </strong> {micropost.content}
       </p>
       <p className="pb-4">
-        <strong>User: </strong> {micropost.user_id}
+        <strong>User: </strong> {micropost.userId}
       </p>
       <Link href={`/microposts/${router.query}/edit`}>
         <a className="underline">Edit</a>

@@ -25,7 +25,7 @@ const Microposts: NextPage<{ microposts: Micropost[] }> = ({ microposts }) => {
             return (
               <tr key={microposts.id}>
                 <td className="px-1">{microposts.content}</td>
-                <td className="px-1">{microposts.user_id}</td>
+                <td className="px-1">{microposts.userId}</td>
                 <td>
                   <Link href={`/microposts/${microposts.id}`}>
                     <a className="px-1 underline">Show</a>

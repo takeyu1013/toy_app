@@ -32,7 +32,7 @@ const Edit: NextPage<{ micropost: Micropost }> = ({ micropost }) => {
       {
         body: JSON.stringify({
           content: data.content,
-          user_id: data.user_id,
+          userId: data.userId,
         }),
         headers: {
           "Content-Type": "application/json",
@@ -50,7 +50,7 @@ const Edit: NextPage<{ micropost: Micropost }> = ({ micropost }) => {
     <div className="p-8">
       <h1 className="font-extrabold text-3xl">New Micropost</h1>
       <form onSubmit={handleSubmit(updateMicropost)}>
-        {errors.user_id && "User must exist"}
+        {errors.userId && "User must exist"}
         {errors.content && "Content can't be blank"}
         {errors.content?.type === "maxLength" &&
           "Content is too long (maximum is 140 charactors"}
@@ -62,15 +62,15 @@ const Edit: NextPage<{ micropost: Micropost }> = ({ micropost }) => {
           defaultValue={micropost.content}
           {...register("content", { required: true, maxLength: 140 })}
         />
-        <label className="pt-4 block" htmlFor="user_id">
+        <label className="pt-4 block" htmlFor="userId">
           User
         </label>
         <div className="pb-4">
           <input
             type="number"
             className="border border-black block"
-            defaultValue={micropost.user_id}
-            {...register("user_id", { required: true })}
+            defaultValue={micropost.userId}
+            {...register("userId", { required: true })}
           />
         </div>
         <button className="block border rounded-lg px-2 text-sm" type="submit">
