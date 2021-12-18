@@ -1,4 +1,5 @@
 import type { NextPage, GetServerSideProps } from "next";
+import { useRouter } from "next/dist/client/router";
 import Link from "next/link";
 import { useCallback } from "react";
 
@@ -19,11 +20,20 @@ type User = {
 type Props = { users: User[] };
 
 const UserComponent: React.VFC<{ user: User }> = ({ user }) => {
+  const router = useRouter();
   const destroyUser = useCallback(async () => {
-    await fetch(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/users/${user.id}`, {
-      method: "DELETE",
-    });
-  }, [user.id]);
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_HOST}/users/${user.id}`,
+      {
+        method: "DELETE",
+      }
+    );
+    if (response.ok) {
+      router.push(`/users`);
+    } else {
+      console.error("Could not obtain micropost info");
+    }
+  }, [user.id, router]);
 
   return (
     <tr>

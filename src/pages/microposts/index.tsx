@@ -2,6 +2,7 @@ import type { NextPage, GetServerSideProps } from "next";
 import type { Micropost } from "../../types/micropost";
 import Link from "next/link";
 import { useCallback } from "react";
+import { useRouter } from "next/dist/client/router";
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/microposts`);
@@ -15,14 +16,20 @@ export const getServerSideProps: GetServerSideProps = async () => {
 const MicropostComponent: React.VFC<{ micropost: Micropost }> = ({
   micropost,
 }) => {
+  const router = useRouter();
   const destroyMicropost = useCallback(async () => {
-    await fetch(
+    const response = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_HOST}/microposts/${micropost.id}`,
       {
         method: "DELETE",
       }
     );
-  }, [micropost.id]);
+    if (response.ok) {
+      router.push(`/microposts`);
+    } else {
+      console.error("Could not obtain micropost info");
+    }
+  }, [micropost.id, router]);
 
   return (
     <tr>
